@@ -1,0 +1,11 @@
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+*.log
+ig_export_extracted
+ig_saved_downloads
+.git
+.gitignore

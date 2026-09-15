@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: savedge
+    runtime: docker
+    plan: free
+    region: oregon
+    branch: main
+    autoDeploy: true
+    healthCheckPath: /healthz
+    envVars:
+      - key: PYTHON_ENV
+        value: production
+      - key: PORT
+        value: "10000"
