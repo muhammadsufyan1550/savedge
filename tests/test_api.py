@@ -22,6 +22,33 @@ def test_index_html():
     assert response.status_code == 200
     assert "Savedge" in response.text
     assert "buymeacoffee.com/savedge" in response.text
+    assert "<title>Savedge</title>" in response.text
+    assert 'name="description"' in response.text
+    assert "savedge.onrender.com" in response.text
+    assert 'property="og:title"' in response.text
+    assert 'name="twitter:card"' in response.text
+    assert "application/ld+json" in response.text
+    assert "WebApplication" in response.text
+    assert "Frequently Asked Questions" in response.text
+    assert "How do I download my Instagram saved posts?" in response.text
+    assert "Can I bulk download Instagram reels?" in response.text
+    assert "Is Savedge free to use?" in response.text
+
+
+def test_robots_txt():
+    response = client.get("/robots.txt")
+    assert response.status_code == 200
+    assert "User-agent: *" in response.text
+    assert "Allow: /" in response.text
+    assert "savedge.onrender.com/sitemap.xml" in response.text
+
+
+def test_sitemap_xml():
+    response = client.get("/sitemap.xml")
+    assert response.status_code == 200
+    assert "application/xml" in response.headers["content-type"]
+    assert "savedge.onrender.com" in response.text
+    assert "<urlset" in response.text
 
 
 def test_upload_invalid_extension():
@@ -47,16 +74,11 @@ def test_download_not_ready():
 
 
 def test_upload_and_status_flow(tmp_path):
-    # Create a dummy zip containing saved_posts.json
     zip_bytes = io.BytesIO()
     with zipfile.ZipFile(zip_bytes, "w") as zf:
-        zf.writestr(
-            "saved_posts.json",
-            json.dumps({"saved_saved_media": []})
-        )
+        zf.writestr("saved_posts.json", json.dumps({"saved_saved_media": []}))
     zip_bytes.seek(0)
 
-    # Patch process_export_zip to avoid running real network yt-dlp calls during integration test
     with patch("app.main.process_export_zip") as mock_process:
         fake_zip = tmp_path / "mock_download.zip"
         fake_zip.write_text("mock zip content")
@@ -71,12 +93,10 @@ def test_upload_and_status_flow(tmp_path):
         assert "session_id" in data
         session_id = data["session_id"]
 
-        # Check status endpoint
         status_res = client.get(f"/status/{session_id}")
         assert status_res.status_code == 200
         assert status_res.json()["session_id"] == session_id
 
-        # Wait briefly for background thread to complete
         import time
         for _ in range(20):
             time.sleep(0.1)
@@ -88,7 +108,6 @@ def test_upload_and_status_flow(tmp_path):
         assert final_status["state"] == "done"
         assert final_status["has_download"] is True
 
-        # Test download endpoint
         dl_res = client.get(f"/download/{session_id}")
         assert dl_res.status_code == 200
         assert dl_res.content == b"mock zip content"
@@ -120,7 +139,6 @@ def test_cancel_api_endpoint():
     assert data["session_id"] == session_id
     assert data["success"] is True
 
-    # Check directory was purged
     assert not session.session_dir.exists()
     assert session_manager.get_session(session_id) is None
 
@@ -132,5 +150,5 @@ def test_frontend_theme_and_cancel_elements():
     assert 'id="themeToggle"' in html
     assert 'id="cancelBtn"' in html
     assert 'savedge_theme' in html
-
-
+    assert 'rel="canonical"' in html
+    assert 'rel="icon"' in html

@@ -11,7 +11,7 @@ from pathlib import Path
 
 from fastapi import BackgroundTasks, FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse, StreamingResponse
+from fastapi.responses import FileResponse, HTMLResponse, PlainTextResponse, Response, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 from app.downloader import process_export_zip
@@ -270,6 +270,28 @@ def download_archive(session_id: str, background_tasks: BackgroundTasks):
         filename=f"savedge_{session_id[:8]}.zip",
         media_type="application/zip",
     )
+
+
+@app.get("/robots.txt", response_class=PlainTextResponse, include_in_schema=False)
+def robots_txt():
+    """Serve robots.txt to allow all crawlers."""
+    return "User-agent: *\nAllow: /\nSitemap: https://savedge.onrender.com/sitemap.xml\n"
+
+
+@app.get("/sitemap.xml", include_in_schema=False)
+def sitemap_xml():
+    """Serve XML sitemap for search engines."""
+    content = (
+        '<?xml version="1.0" encoding="UTF-8"?>'
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+        "<url>"
+        "<loc>https://savedge.onrender.com/</loc>"
+        "<changefreq>monthly</changefreq>"
+        "<priority>1.0</priority>"
+        "</url>"
+        "</urlset>"
+    )
+    return Response(content=content, media_type="application/xml")
 
 
 # Serve index.html directly at root

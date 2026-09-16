@@ -3,8 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Savedge — Download All Your Instagram Saved Posts</title>
-  <meta name="description" content="Upload your official Instagram data export ZIP. We'll download all your saved posts, photos, and reels into a single clean archive. 100% private, no login required.">
+  <title>Savedge</title>
+
+  <!-- SEO: Primary -->
+  <meta name="description" content="Free tool to bulk download all your Instagram saved posts, reels and videos in one click. No login required. Just upload your official Instagram data export ZIP.">
+  <meta name="keywords" content="instagram saved posts downloader, bulk download instagram reels, export instagram saved videos, instagram data export, download instagram saved media">
+  <link rel="canonical" href="https://savedge.onrender.com">
+
+  <!-- SEO: Open Graph (Facebook, WhatsApp, LinkedIn) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://savedge.onrender.com">
+  <meta property="og:title" content="Savedge — Bulk Download Your Instagram Saved Posts">
+  <meta property="og:description" content="Free tool to bulk download all your Instagram saved posts, reels and videos in one click. No login required. Just upload your official Instagram data export ZIP.">
+  <meta property="og:image" content="https://savedge.onrender.com/static/og-image.png">
+  <meta property="og:site_name" content="Savedge">
+
+  <!-- SEO: Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://savedge.onrender.com">
+  <meta name="twitter:title" content="Savedge — Bulk Download Your Instagram Saved Posts">
+  <meta name="twitter:description" content="Free tool to bulk download all your Instagram saved posts, reels and videos in one click. No login required. Just upload your official Instagram data export ZIP.">
+  <meta name="twitter:image" content="https://savedge.onrender.com/static/og-image.png">
+
+  <!-- Favicon: Bookmark icon as inline SVG -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230071e3' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M18 7v14l-6 -4l-6 4v-14a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4z'/%3E%3C/svg%3E">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Savedge",
+    "url": "https://savedge.onrender.com",
+    "description": "Free tool to bulk download all your Instagram saved posts, reels and videos in one click. No login required. Just upload your official Instagram data export ZIP.",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Any",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Bulk download Instagram saved posts",
+      "Download Instagram reels and videos",
+      "No Instagram login required",
+      "100% private processing",
+      "Official export ZIP support"
+    ]
+  }
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -831,6 +879,88 @@
       }
     }
 
+    /* FAQ Section */
+    .faq-section {
+      width: 100%;
+      max-width: 720px;
+      margin: 64px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-section h2 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      transition: color 200ms ease;
+    }
+
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: border-color 200ms ease, background 200ms ease;
+    }
+
+    .faq-item:hover {
+      border-color: var(--border-hover);
+    }
+
+    .faq-question {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 16px 20px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      font-size: 0.93rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      font-family: var(--font);
+      transition: color 200ms ease;
+    }
+
+    .faq-question:hover {
+      color: var(--text-primary);
+    }
+
+    .faq-chevron {
+      flex-shrink: 0;
+      color: var(--text-muted);
+      transition: transform 250ms ease, color 200ms ease;
+    }
+
+    .faq-item.open .faq-chevron {
+      transform: rotate(180deg);
+      color: var(--accent-blue);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 300ms ease, padding 200ms ease;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+    }
+
+    .faq-answer p {
+      padding: 0 20px 18px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      transition: color 200ms ease;
+    }
+
     /* Responsive */
     @media (max-width: 680px) {
       .navbar-inner { padding: 0 16px; }
@@ -840,6 +970,7 @@
       .drop-zone { padding: 36px 16px; }
       .ad-leaderboard { display: none; }
       footer.app-footer { margin-top: 48px; }
+      .faq-section { margin-top: 48px; }
     }
   </style>
 </head>
@@ -1100,6 +1231,61 @@
            data-ad-slot="XXXXXXXXXX"></ins>
       <div class="ad-placeholder-text">Advertisement</div>
     </div>
+
+    <!-- FAQ Section -->
+    <section class="faq-section" aria-label="Frequently Asked Questions">
+      <h2>Frequently Asked Questions</h2>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          How do I download my Instagram saved posts?
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6l6 -6"></path></svg>
+        </button>
+        <div class="faq-answer" role="region">
+          <p>Go to Instagram → Settings → Your activity → Download your information → Request a download. Select "JSON" format. Once Instagram emails you the download link, save the ZIP file and upload it here on Savedge. We'll extract and download all your saved posts automatically — no Instagram login needed.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          Can I bulk download Instagram reels?
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6l6 -6"></path></svg>
+        </button>
+        <div class="faq-answer" role="region">
+          <p>Yes! Savedge can bulk download Instagram reels along with photos and videos from your saved posts. As long as they appear in your official Instagram data export, Savedge will attempt to download them all and bundle them into a single ZIP archive for you.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          How to export Instagram saved videos?
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6l6 -6"></path></svg>
+        </button>
+        <div class="faq-answer" role="region">
+          <p>Instagram's official data export (available from Settings → Download your information) includes a list of all your saved posts as URLs in a JSON file. Savedge reads that JSON, then downloads each video and photo directly from the public CDN links — no passwords or tokens required.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          Is Savedge free to use?
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6l6 -6"></path></svg>
+        </button>
+        <div class="faq-answer" role="region">
+          <p>Yes, Savedge is completely free to use. There are no accounts, subscriptions, or hidden fees. If you find it useful and want to support the project, you can buy the developer a coffee — but it's entirely optional.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" aria-expanded="false">
+          Do I need to log in to Instagram on Savedge?
+          <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6l6 -6"></path></svg>
+        </button>
+        <div class="faq-answer" role="region">
+          <p>No. Savedge never asks for your Instagram password, username, or any credentials. You only upload the ZIP file that Instagram provides through their official "Download your information" export — a file that already belongs to you. Your data never touches Instagram's servers through Savedge.</p>
+        </div>
+      </div>
+    </section>
 
     <!-- Footer -->
     <footer class="app-footer">
@@ -1449,6 +1635,24 @@
         currentUrlText.style.display = 'none';
       }
     }
+
+    // FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-item.open').forEach(el => {
+          el.classList.remove('open');
+          el.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+        });
+        // Toggle clicked one
+        if (!isOpen) {
+          item.classList.add('open');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
   </script>
 </body>
 </html>
