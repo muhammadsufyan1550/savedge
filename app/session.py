@@ -19,6 +19,7 @@ SessionState = Literal[
     "packaging",
     "done",
     "error",
+    "cancelled",
 ]
 
 
@@ -36,6 +37,9 @@ class Session:
     created_at: float = field(default_factory=time.time)
     last_activity: float = field(default_factory=time.time)
     error_msg: str = ""
+    cancel_event: threading.Event = field(default_factory=threading.Event)
+    current_process: Optional[object] = None
+
 
     def to_dict(self) -> dict:
         percent = 0.0
@@ -100,6 +104,38 @@ class SessionManager:
                     setattr(session, key, value)
             session.last_activity = time.time()
             return session
+
+    def cancel_session(self, session_id: str) -> bool:
+        """Signals session cancellation, terminates active subprocess, and purges temp storage."""
+        with self._lock:
+            session = self._sessions.get(session_id)
+            if not session:
+                return False
+            session.state = "cancelled"
+            session.cancel_event.set()
+            if session.current_process:
+                try:
+                    session.current_process.terminate()
+                except Exception as e:
+                    logger.debug("Error terminating process for %s: %s", session_id, e)
+
+        return self.cleanup_session(session_id)
+
+    def is_cancelled(self, session_id: str) -> bool:
+        with self._lock:
+            session = self._sessions.get(session_id)
+            return bool(session and session.cancel_event.is_set())
+
+    def set_process(self, session_id: str, process: Optional[object]):
+        with self._lock:
+            session = self._sessions.get(session_id)
+            if session:
+                session.current_process = process
+                if process and session.cancel_event.is_set():
+                    try:
+                        process.terminate()
+                    except Exception:
+                        pass
 
     def cleanup_session(self, session_id: str) -> bool:
         with self._lock:

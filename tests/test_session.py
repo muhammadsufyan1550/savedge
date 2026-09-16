@@ -44,3 +44,18 @@ def test_cleanup_expired(tmp_path: Path):
     assert manager.get_session("expired-test") is None
 
     manager.shutdown()
+
+
+def test_cancel_session(tmp_path: Path):
+    manager = SessionManager(base_temp_dir=tmp_path, max_age_seconds=60)
+    session = manager.create_session("cancel-test-id")
+    session_dir = session.session_dir
+    assert session_dir.exists()
+
+    assert not manager.is_cancelled("cancel-test-id")
+    ok = manager.cancel_session("cancel-test-id")
+    assert ok is True
+    assert not session_dir.exists()
+    assert manager.get_session("cancel-test-id") is None
+    manager.shutdown()
+

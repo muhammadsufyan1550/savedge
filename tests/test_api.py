@@ -108,3 +108,29 @@ def test_progress_stream_sse():
     session_manager.cleanup_session(session_id)
 
 
+def test_cancel_api_endpoint():
+    session_id = "api-cancel-session"
+    session = session_manager.create_session(session_id)
+    assert session.session_dir.exists()
+
+    res = client.post(f"/cancel/{session_id}")
+    assert res.status_code == 200
+    data = res.json()
+    assert data["status"] == "cancelled"
+    assert data["session_id"] == session_id
+    assert data["success"] is True
+
+    # Check directory was purged
+    assert not session.session_dir.exists()
+    assert session_manager.get_session(session_id) is None
+
+
+def test_frontend_theme_and_cancel_elements():
+    res = client.get("/")
+    assert res.status_code == 200
+    html = res.text
+    assert 'id="themeToggle"' in html
+    assert 'id="cancelBtn"' in html
+    assert 'savedge_theme' in html
+
+

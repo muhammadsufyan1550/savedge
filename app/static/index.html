@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +9,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
+  <script>
+    // Early theme application to avoid any FOUT/theme flickering
+    (function() {
+      try {
+        const savedTheme = localStorage.getItem('savedge_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      } catch (e) {}
+    })();
+  </script>
+
   <style>
     :root {
       --bg: #0a0a0a;
@@ -31,6 +41,37 @@
       --radius-md: 10px;
       --radius-lg: 14px;
       --font: -apple-system, BlinkMacSystemFont, "Inter", "Geist", "Segoe UI", Roboto, sans-serif;
+      --nav-bg: rgba(10, 10, 10, 0.8);
+      --glow-bg: radial-gradient(ellipse at 50% 0%, rgba(0, 113, 227, 0.07) 0%, rgba(0, 199, 190, 0.02) 45%, transparent 70%);
+      --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      --dropzone-border: #262626;
+      --dropzone-bg: rgba(255, 255, 255, 0.01);
+      --trust-badge-bg: rgba(255, 255, 255, 0.03);
+    }
+
+    [data-theme="light"] {
+      --bg: #f8f9fa;
+      --surface: #ffffff;
+      --surface-subtle: #f1f3f5;
+      --surface-elevated: #e9ecef;
+      --border: #e2e5e9;
+      --border-hover: #cfd4dc;
+      --border-focus: #adb5bd;
+      --text-primary: #12151a;
+      --text-secondary: #5c6470;
+      --text-muted: #8c95a3;
+      --accent-gradient: linear-gradient(135deg, #0066cc, #00a89f);
+      --accent-blue: #0066cc;
+      --accent-teal: #00a89f;
+      --danger: #e02424;
+      --danger-bg: rgba(224, 36, 36, 0.08);
+      --success: #198754;
+      --nav-bg: rgba(248, 249, 250, 0.85);
+      --glow-bg: radial-gradient(ellipse at 50% 0%, rgba(0, 102, 204, 0.07) 0%, rgba(0, 168, 159, 0.03) 45%, transparent 70%);
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.03);
+      --dropzone-border: #d0d5dd;
+      --dropzone-bg: rgba(0, 0, 0, 0.01);
+      --trust-badge-bg: rgba(0, 0, 0, 0.03);
     }
 
     * {
@@ -51,9 +92,10 @@
       -webkit-font-smoothing: antialiased;
       overflow-x: hidden;
       position: relative;
+      transition: background-color 200ms ease, color 200ms ease;
     }
 
-    /* Ambient Subtle Top Glow (Resend style) */
+    /* Ambient Subtle Top Glow */
     body::before {
       content: "";
       position: absolute;
@@ -62,9 +104,10 @@
       transform: translateX(-50%);
       width: 960px;
       height: 380px;
-      background: radial-gradient(ellipse at 50% 0%, rgba(0, 113, 227, 0.07) 0%, rgba(0, 199, 190, 0.02) 45%, transparent 70%);
+      background: var(--glow-bg);
       pointer-events: none;
       z-index: 0;
+      transition: background 200ms ease;
     }
 
     /* Sticky Minimal Navbar */
@@ -73,11 +116,12 @@
       top: 0;
       width: 100%;
       height: 60px;
-      background: rgba(10, 10, 10, 0.8);
+      background: var(--nav-bg);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       z-index: 100;
+      transition: background 200ms ease, border-color 200ms ease;
     }
 
     .navbar-inner {
@@ -104,11 +148,12 @@
       height: 26px;
       border-radius: 6px;
       background: var(--surface-subtle);
-      border: 1px solid var(--border-hover);
+      border: 1px solid var(--border);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #ffffff;
+      color: var(--text-primary);
+      transition: all 200ms ease;
     }
 
     .brand-logo-icon svg {
@@ -121,6 +166,54 @@
       font-weight: 700;
       letter-spacing: -0.03em;
       color: var(--text-primary);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-theme-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 200ms ease;
+      padding: 0;
+    }
+
+    .nav-theme-btn:hover {
+      color: var(--text-primary);
+      border-color: var(--border-hover);
+      background: var(--surface-elevated);
+      transform: translateY(-1px);
+    }
+
+    /* By default (dark mode), show sun icon, hide moon icon */
+    .theme-icon-moon {
+      display: none;
+    }
+    .theme-icon-sun {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* In light mode, show moon icon, hide sun icon */
+    [data-theme="light"] .theme-icon-sun {
+      display: none;
+    }
+    [data-theme="light"] .theme-icon-moon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .nav-coffee-btn {
@@ -170,6 +263,7 @@
       margin: 20px 0;
       text-align: center;
       position: relative;
+      transition: background-color 200ms ease, border-color 200ms ease;
     }
 
     .ad-placeholder-text {
@@ -207,7 +301,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--trust-badge-bg);
       border: 1px solid var(--border);
       padding: 6px 14px;
       border-radius: 9999px;
@@ -216,6 +310,7 @@
       color: var(--text-secondary);
       margin-bottom: 22px;
       letter-spacing: 0.01em;
+      transition: all 200ms ease;
     }
 
     .trust-dot {
@@ -234,6 +329,7 @@
       color: var(--text-primary);
       margin-bottom: 16px;
       max-width: 720px;
+      transition: color 200ms ease;
     }
 
     .hero-subtitle {
@@ -243,6 +339,7 @@
       margin: 0 auto;
       font-weight: 400;
       line-height: 1.55;
+      transition: color 200ms ease;
     }
 
     /* How It Works (3 Steps) */
@@ -262,13 +359,13 @@
       padding: 22px 20px;
       display: flex;
       flex-direction: column;
+      box-shadow: var(--card-shadow);
       transition: all 200ms ease;
     }
 
     .step-card:hover {
       border-color: var(--border-hover);
       transform: translateY(-2px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
 
     .step-card-header {
@@ -301,12 +398,14 @@
       color: var(--text-primary);
       margin-bottom: 6px;
       letter-spacing: -0.01em;
+      transition: color 200ms ease;
     }
 
     .step-desc {
       font-size: 0.84rem;
       color: var(--text-secondary);
       line-height: 1.45;
+      transition: color 200ms ease;
     }
 
     /* Main App Card */
@@ -316,7 +415,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 28px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      box-shadow: var(--card-shadow);
       margin-bottom: 24px;
       transition: all 200ms ease;
       animation: heroFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -324,12 +423,12 @@
 
     /* Upload Zone */
     .drop-zone {
-      border: 1px dashed #262626;
+      border: 1px dashed var(--dropzone-border);
       border-radius: var(--radius-md);
       padding: 50px 24px;
       text-align: center;
       cursor: pointer;
-      background: rgba(255, 255, 255, 0.01);
+      background: var(--dropzone-bg);
       transition: all 200ms ease;
       display: flex;
       flex-direction: column;
@@ -340,7 +439,7 @@
 
     .drop-zone:hover, .drop-zone.dragover {
       border-color: var(--accent-blue);
-      background: rgba(0, 113, 227, 0.03);
+      background: rgba(0, 113, 227, 0.04);
       box-shadow: 0 0 0 1px rgba(0, 113, 227, 0.25), 0 8px 30px rgba(0, 113, 227, 0.08);
       transform: translateY(-1px);
     }
@@ -362,7 +461,7 @@
     .drop-zone:hover .drop-icon {
       transform: scale(1.05);
       border-color: var(--border-hover);
-      color: #ffffff;
+      color: var(--text-primary);
       background: var(--surface-elevated);
     }
 
@@ -371,11 +470,13 @@
       font-weight: 600;
       color: var(--text-primary);
       letter-spacing: -0.01em;
+      transition: color 200ms ease;
     }
 
     .drop-hint {
       font-size: 0.85rem;
       color: var(--text-secondary);
+      transition: color 200ms ease;
     }
 
     .file-input {
@@ -417,11 +518,13 @@
       text-overflow: ellipsis;
       max-width: 360px;
       color: var(--text-primary);
+      transition: color 200ms ease;
     }
 
     .file-size {
       font-size: 0.78rem;
       color: var(--text-secondary);
+      transition: color 200ms ease;
     }
 
     /* Buttons */
@@ -460,7 +563,7 @@
     }
 
     .btn-secondary {
-      background: transparent;
+      background: var(--surface-subtle);
       color: var(--text-secondary);
       border: 1px solid var(--border);
     }
@@ -468,7 +571,7 @@
     .btn-secondary:hover {
       color: var(--text-primary);
       border-color: var(--border-hover);
-      background: var(--surface-subtle);
+      background: var(--surface-elevated);
     }
 
     /* Progress Panel */
@@ -493,12 +596,13 @@
       align-items: center;
       gap: 10px;
       letter-spacing: -0.01em;
+      transition: color 200ms ease;
     }
 
     .spinner {
       width: 16px;
       height: 16px;
-      border: 2px solid rgba(255, 255, 255, 0.12);
+      border: 2px solid rgba(128, 128, 128, 0.2);
       border-top-color: var(--accent-blue);
       border-radius: 50%;
       animation: spin 0.8s linear infinite;
@@ -509,6 +613,7 @@
       font-weight: 700;
       font-variant-numeric: tabular-nums;
       color: var(--text-primary);
+      transition: color 200ms ease;
     }
 
     .progress-bar-container {
@@ -518,6 +623,7 @@
       border: 1px solid var(--border);
       border-radius: 9999px;
       overflow: hidden;
+      transition: all 200ms ease;
     }
 
     .progress-bar-fill {
@@ -534,11 +640,13 @@
       align-items: center;
       font-size: 0.86rem;
       color: var(--text-secondary);
+      transition: color 200ms ease;
     }
 
     #counterText {
       color: var(--text-primary);
       font-weight: 500;
+      transition: color 200ms ease;
     }
 
     .current-url-text {
@@ -553,6 +661,37 @@
       padding: 8px 12px;
       border-radius: var(--radius-sm);
       border: 1px solid var(--border);
+      transition: all 200ms ease;
+    }
+
+    /* Progress Actions (Cancel Button) */
+    .progress-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 4px;
+    }
+
+    .cancel-btn {
+      padding: 8px 16px;
+      font-size: 0.84rem;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      border: 1px solid var(--border);
+      background: var(--surface-subtle);
+      transition: all 200ms ease;
+    }
+
+    .cancel-btn:hover {
+      color: var(--danger);
+      border-color: rgba(255, 69, 58, 0.4);
+      background: var(--danger-bg);
+      transform: translateY(-1px);
+    }
+
+    .cancel-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
     }
 
     /* Complete Stage */
@@ -584,6 +723,7 @@
       font-weight: 700;
       letter-spacing: -0.02em;
       color: var(--text-primary);
+      transition: color 200ms ease;
     }
 
     .complete-summary {
@@ -591,6 +731,7 @@
       font-size: 0.95rem;
       max-width: 500px;
       line-height: 1.5;
+      transition: color 200ms ease;
     }
 
     .download-cta-btn {
@@ -609,6 +750,10 @@
       margin-top: 20px;
       align-items: flex-start;
       gap: 12px;
+    }
+
+    [data-theme="light"] .error-banner {
+      color: var(--danger);
     }
 
     .error-banner svg {
@@ -656,6 +801,7 @@
       color: var(--text-muted);
       line-height: 1.6;
       max-width: 600px;
+      transition: color 200ms ease;
     }
 
     /* Keyframes */
@@ -699,7 +845,7 @@
 </head>
 <body>
 
-  <!-- Sticky Minimal Navbar -->
+  <!-- Sticky Minimal Navbar with Theme Toggle -->
   <nav class="navbar">
     <div class="navbar-inner">
       <a href="/" class="nav-brand">
@@ -711,10 +857,29 @@
         </div>
         <span class="nav-brand-text">Savedge</span>
       </a>
-      <a href="https://www.buymeacoffee.com/savedge" target="_blank" rel="noopener noreferrer" class="nav-coffee-btn">
-        <span>Buy me a coffee</span>
-        <span>☕</span>
-      </a>
+      <div class="nav-actions">
+        <!-- Theme Toggle Button -->
+        <button id="themeToggle" class="nav-theme-btn" aria-label="Toggle dark and light mode" title="Toggle dark/light theme">
+          <span class="theme-icon-sun">
+            <!-- Tabler Sun Icon -->
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"></path>
+            </svg>
+          </span>
+          <span class="theme-icon-moon">
+            <!-- Tabler Moon Icon -->
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"></path>
+            </svg>
+          </span>
+        </button>
+
+        <a href="https://www.buymeacoffee.com/savedge" target="_blank" rel="noopener noreferrer" class="nav-coffee-btn">
+          <span>Buy me a coffee</span>
+          <span>☕</span>
+        </a>
+      </div>
     </div>
   </nav>
 
@@ -867,6 +1032,18 @@
         </div>
 
         <div class="current-url-text" id="currentUrlText" style="display: none;"></div>
+
+        <!-- Cancel Download Action -->
+        <div class="progress-actions">
+          <button type="button" class="btn btn-secondary cancel-btn" id="cancelBtn">
+            <!-- Tabler X Icon -->
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6l-12 12"></path>
+              <path d="M6 6l12 12"></path>
+            </svg>
+            <span>Cancel Download</span>
+          </button>
+        </div>
       </section>
 
       <!-- Complete Stage -->
@@ -904,7 +1081,7 @@
           <line x1="12" y1="16" x2="12.01" y2="16"></line>
         </svg>
         <div>
-          <div style="font-weight: 600; margin-bottom: 2px; color: #ffffff;">Processing Failed</div>
+          <div style="font-weight: 600; margin-bottom: 2px;">Processing Failed</div>
           <div id="errorMessage">An unexpected error occurred.</div>
           <button class="btn btn-secondary" id="retryBtn" style="margin-top: 10px; padding: 6px 14px; font-size: 0.8rem;">
             Try Again
@@ -940,6 +1117,26 @@
   </div>
 
   <script>
+    // Theme toggle management
+    const themeToggle = document.getElementById('themeToggle');
+    const THEME_KEY = 'savedge_theme';
+
+    function initTheme() {
+      const savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem(THEME_KEY, newTheme);
+      });
+    }
+
+    initTheme();
+
     // State management
     let selectedFile = null;
     let eventSource = null;
@@ -963,6 +1160,7 @@
     const failedText = document.getElementById('failedText');
     const currentUrlText = document.getElementById('currentUrlText');
     const progressSpinner = document.getElementById('progressSpinner');
+    const cancelBtn = document.getElementById('cancelBtn');
 
     const completePanel = document.getElementById('completePanel');
     const completeSummary = document.getElementById('completeSummary');
@@ -1037,6 +1235,25 @@
     retryBtn.addEventListener('click', resetUI);
     restartBtn.addEventListener('click', resetUI);
 
+    // Cancel Button Handler
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', async () => {
+        if (!currentSessionId) {
+          resetUI();
+          return;
+        }
+        cancelBtn.disabled = true;
+        cancelBtn.innerHTML = '<span>Cancelling...</span>';
+        try {
+          await fetch(`/cancel/${currentSessionId}`, { method: 'POST' });
+        } catch (err) {
+          console.error('Error cancelling download:', err);
+        } finally {
+          resetUI();
+        }
+      });
+    }
+
     function resetUI() {
       if (eventSource) {
         eventSource.close();
@@ -1049,6 +1266,17 @@
       selectedFile = null;
       currentSessionId = null;
       fileInput.value = '';
+
+      if (cancelBtn) {
+        cancelBtn.disabled = false;
+        cancelBtn.innerHTML = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6l-12 12"></path>
+            <path d="M6 6l12 12"></path>
+          </svg>
+          <span>Cancel Download</span>
+        `;
+      }
 
       hideError();
       uploadSection.style.display = 'block';
@@ -1145,7 +1373,7 @@
           }
           const data = await res.json();
           updateProgressUI(data);
-          if (data.state === 'done' || data.state === 'error') {
+          if (data.state === 'done' || data.state === 'error' || data.state === 'cancelled') {
             clearInterval(pollInterval);
             pollInterval = null;
           }
@@ -1156,6 +1384,13 @@
     }
 
     function updateProgressUI(data) {
+      if (data.state === 'cancelled') {
+        if (eventSource) eventSource.close();
+        if (pollInterval) clearInterval(pollInterval);
+        resetUI();
+        return;
+      }
+
       if (data.state === 'error') {
         if (eventSource) eventSource.close();
         if (pollInterval) clearInterval(pollInterval);

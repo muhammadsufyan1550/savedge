@@ -94,6 +94,8 @@ def run_download_worker(session_id: str, zip_path: Path, session_dir: Path):
             on_extract=on_extract,
             on_progress=on_progress,
             on_packaging=on_packaging,
+            is_cancelled=lambda: session_manager.is_cancelled(session_id),
+            register_process=lambda proc: session_manager.set_process(session_id, proc),
         )
 
         msg = f"Done! Successfully downloaded {success_count} posts"
@@ -110,6 +112,10 @@ def run_download_worker(session_id: str, zip_path: Path, session_dir: Path):
         )
         logger.info("Session %s completed successfully (%d downloaded, %d failed)", session_id, success_count, failed_count)
 
+    except InterruptedError:
+        logger.info("Worker for session %s terminated cleanly due to user cancellation.", session_id)
+        session_manager.cleanup_session(session_id)
+        return
     except Exception as exc:
         logger.exception("Error in worker for session %s: %s", session_id, exc)
         session_manager.update_session(
@@ -118,6 +124,7 @@ def run_download_worker(session_id: str, zip_path: Path, session_dir: Path):
             error_msg=str(exc),
             status_message=f"Error: {exc}",
         )
+
 
 
 @app.get("/healthz")
@@ -208,7 +215,7 @@ async def progress_stream(session_id: str):
                 last_current = current_count
                 last_ping = now
 
-            if current_state in ("done", "error"):
+            if current_state in ("done", "error", "cancelled"):
                 await asyncio.sleep(0.5)
                 break
 
@@ -225,12 +232,20 @@ async def progress_stream(session_id: str):
     )
 
 
+@app.post("/cancel/{session_id}")
+def cancel_session(session_id: str):
+    """Cancels an active download session and immediately deletes all server temp files."""
+    success = session_manager.cancel_session(session_id)
+    return {"status": "cancelled", "session_id": session_id, "success": success}
+
+
 @app.get("/status/{session_id}")
 def get_session_status(session_id: str):
     """Lightweight polling endpoint as a fallback for SSE."""
     session = session_manager.get_session(session_id)
     if not session:
         raise HTTPException(status_code=404, detail="Session not found or expired.")
+
     return session.to_dict()
 
 
