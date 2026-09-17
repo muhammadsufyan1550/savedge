@@ -152,3 +152,8 @@ def test_frontend_theme_and_cancel_elements():
     assert 'savedge_theme' in html
     assert 'rel="canonical"' in html
     assert 'rel="icon"' in html
+    assert 'id="guideNavLink"' in html
+    assert 'id="export-guide"' in html
+    assert "Your information and permissions" in html
+    assert "STEP 1" in html
+    assert "STEP 7" in html

@@ -122,6 +122,10 @@
       --trust-badge-bg: rgba(0, 0, 0, 0.03);
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -277,6 +281,24 @@
       color: var(--text-primary);
       text-decoration: none;
       transition: all 200ms ease;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      transition: all 200ms ease;
+    }
+
+    .nav-link:hover {
+      color: var(--text-primary);
+      background: var(--surface-subtle);
     }
 
     .nav-coffee-btn:hover {
@@ -961,6 +983,143 @@
       transition: color 200ms ease;
     }
 
+    /* Step-by-Step Detailed Guide Section */
+    .guide-section {
+      width: 100%;
+      max-width: 720px;
+      margin: 64px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-margin-top: 80px;
+    }
+
+    .guide-header {
+      margin-bottom: 8px;
+    }
+
+    .guide-header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--trust-badge-bg);
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--accent-teal);
+      margin-bottom: 12px;
+      letter-spacing: 0.02em;
+    }
+
+    .guide-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      transition: color 200ms ease;
+    }
+
+    .guide-header p {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.55;
+      transition: color 200ms ease;
+    }
+
+    .guide-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .guide-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px 22px;
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      box-shadow: var(--card-shadow);
+      transition: border-color 200ms ease, background 200ms ease, transform 200ms ease;
+      opacity: 0;
+      transform: translateY(22px);
+    }
+
+    .guide-card.revealed {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1), transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), border-color 200ms ease, background 200ms ease;
+    }
+
+    .guide-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .guide-step-badge {
+      font-size: 0.76rem;
+      font-weight: 700;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      letter-spacing: 0.05em;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      padding-top: 3px;
+      white-space: nowrap;
+      min-width: 54px;
+    }
+
+    .guide-icon-wrap {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-md);
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+      transition: all 200ms ease;
+    }
+
+    .guide-card:hover .guide-icon-wrap {
+      color: var(--accent-blue);
+      border-color: var(--border-hover);
+    }
+
+    .guide-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .guide-title {
+      font-size: 0.98rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+      margin-bottom: 5px;
+      line-height: 1.4;
+      transition: color 200ms ease;
+    }
+
+    .guide-desc {
+      font-size: 0.86rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      transition: color 200ms ease;
+    }
+
+    .guide-desc b {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
     /* Responsive */
     @media (max-width: 680px) {
       .navbar-inner { padding: 0 16px; }
@@ -971,6 +1130,14 @@
       .ad-leaderboard { display: none; }
       footer.app-footer { margin-top: 48px; }
       .faq-section { margin-top: 48px; }
+      .guide-section { margin-top: 48px; }
+      .guide-card {
+        padding: 16px;
+        gap: 12px;
+      }
+      .guide-step-badge {
+        min-width: 46px;
+      }
     }
   </style>
 </head>
@@ -989,6 +1156,11 @@
         <span class="nav-brand-text">Savedge</span>
       </a>
       <div class="nav-actions">
+        <!-- Guide Link -->
+        <a href="#export-guide" class="nav-link" id="guideNavLink">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5a2.5 2.5 0 0 1 2.5 -2.5h15"></path><path d="M6.5 2h15v20h-15a2.5 2.5 0 0 1 -2.5 -2.5v-15a2.5 2.5 0 0 1 2.5 -2.5z"></path></svg>
+          Guide
+        </a>
         <!-- Theme Toggle Button -->
         <button id="themeToggle" class="nav-theme-btn" aria-label="Toggle dark and light mode" title="Toggle dark/light theme">
           <span class="theme-icon-sun">
@@ -1056,7 +1228,7 @@
         </div>
         <div class="step-title">Request Export</div>
         <div class="step-desc">
-          On Instagram, go to Settings &gt; Accounts Center &gt; Your Information &gt; Download your information. Select <b>JSON</b> format.
+          On Instagram, go to Settings &gt; Meta Accounts Center &gt; Your information and permissions &gt; Export your information.
         </div>
       </div>
 
@@ -1232,6 +1404,129 @@
       <div class="ad-placeholder-text">Advertisement</div>
     </div>
 
+    <!-- Step-by-Step Instagram Export Guide -->
+    <section class="guide-section" id="export-guide" aria-label="Step-by-Step Instagram Export Guide">
+      <div class="guide-header">
+        <div class="guide-header-badge">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path></svg>
+          Official Instagram Flow
+        </div>
+        <h2>How to Export Your Instagram Saved Posts</h2>
+        <p>Follow these 7 simple steps inside the Instagram app or website to get your official export ZIP file.</p>
+      </div>
+
+      <div class="guide-grid">
+        <!-- Step 1 -->
+        <div class="guide-card">
+          <span class="guide-step-badge">STEP 1</span>
+          <div class="guide-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </div>
+          <div class="guide-content">
+            <div class="guide-title">Open Information Settings</div>
+            <div class="guide-desc">Open Instagram → <b>Settings</b> → <b>Meta Accounts Center</b> → <b>Your information and permissions</b></div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="guide-card">
+          <span class="guide-step-badge">STEP 2</span>
+          <div class="guide-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+              <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+              <path d="M12 11v6"></path>
+              <path d="M9.5 14.5l2.5 2.5l2.5 -2.5"></path>
+            </svg>
+          </div>
+          <div class="guide-content">
+            <div class="guide-title">Choose Export Destination</div>
+            <div class="guide-desc">Select <b>'Export your information'</b> → choose <b>'Export to device'</b></div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="guide-card">
+          <span class="guide-step-badge">STEP 3</span>
+          <div class="guide-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 7v14l-6 -4l-6 4v-14a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4z"></path>
+            </svg>
+          </div>
+          <div class="guide-content">
+            <div class="guide-title">Select Saved Posts Only</div>
+            <div class="guide-desc">From <b>'Customize information'</b> check <b>Saved</b> and uncheck everything else</div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="guide-card">
+          <span class="guide-step-badge">STEP 4</span>
+          <div class="guide-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="5" width="16" height="16" rx="2"></rect>
+              <line x1="16" y1="3" x2="16" y2="7"></line>
+              <line x1="8" y1="3" x2="8" y2="7"></line>
+              <line x1="4" y1="11" x2="20" y2="11"></line>
+              <rect x="8" y="15" width="2" height="2"></rect>
+            </svg>
+          </div>
+          <div class="guide-content">
+            <div class="guide-title">Choose JSON Format & Date Range</div>
+            <div class="guide-desc">Choose <b>JSON</b> format and select <b>'All time'</b> or your desired time period</div>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="guide-card">
+          <span class="guide-step-badge">STEP 5</span>
+          <div class="guide-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M13 3l0 7l6 0l-8 11l0 -7l-6 0z"></path>
+            </svg>
+          </div>
+          <div class="guide-content">
+            <div class="guide-title">Start Export</div>
+            <div class="guide-desc">Select media quality and hit the <b>'Start export'</b> button</div>
+          </div>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="guide-card">
+          <span class="guide-step-badge">STEP 6</span>
+          <div class="guide-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"></path>
+              <path d="M3 7l9 6l9 -6"></path>
+            </svg>
+          </div>
+          <div class="guide-content">
+            <div class="guide-title">Download Prepared ZIP</div>
+            <div class="guide-desc">You will be notified by email when your export is ready — go back to Instagram's export screen to download your ZIP</div>
+          </div>
+        </div>
+
+        <!-- Step 7 -->
+        <div class="guide-card">
+          <span class="guide-step-badge">STEP 7</span>
+          <div class="guide-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2"></path>
+              <path d="M7 9l5 -5l5 5"></path>
+              <path d="M12 4v12"></path>
+            </svg>
+          </div>
+          <div class="guide-content">
+            <div class="guide-title">Upload to Savedge</div>
+            <div class="guide-desc">Come back to Savedge and upload that ZIP</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- FAQ Section -->
     <section class="faq-section" aria-label="Frequently Asked Questions">
       <h2>Frequently Asked Questions</h2>
@@ -1242,7 +1537,7 @@
           <svg class="faq-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6l6 -6"></path></svg>
         </button>
         <div class="faq-answer" role="region">
-          <p>Go to Instagram → Settings → Your activity → Download your information → Request a download. Select "JSON" format. Once Instagram emails you the download link, save the ZIP file and upload it here on Savedge. We'll extract and download all your saved posts automatically — no Instagram login needed.</p>
+          <p>Go to Instagram → Settings → Meta Accounts Center → Your information and permissions → Export your information. Select "Export to device", customize to choose only "Saved", pick JSON format with "All time", and start the export. Once Instagram notifies you that your export is ready, download the ZIP and upload it here on Savedge to bulk download all your media in one click — no login required.</p>
         </div>
       </div>
 
@@ -1653,6 +1948,43 @@
         }
       });
     });
+
+    // Smooth scroll for Guide nav link
+    const guideNavLink = document.getElementById('guideNavLink');
+    if (guideNavLink) {
+      guideNavLink.addEventListener('click', (e) => {
+        const target = document.getElementById('export-guide');
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    }
+
+    // IntersectionObserver for Staggered Fade Up of Guide Cards
+    const guideCards = document.querySelectorAll('.guide-card');
+    if ('IntersectionObserver' in window && guideCards.length > 0) {
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const card = entry.target;
+            const index = Array.from(guideCards).indexOf(card);
+            setTimeout(() => {
+              card.classList.add('revealed');
+            }, index * 90);
+            obs.unobserve(card);
+          }
+        });
+      }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      guideCards.forEach(card => observer.observe(card));
+    } else {
+      // Fallback for browsers without IntersectionObserver
+      guideCards.forEach(card => card.classList.add('revealed'));
+    }
   </script>
 </body>
 </html>
