@@ -76,7 +76,7 @@ savedge/
 ### 2. Setup
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USER/savedge.git
+git clone https://github.com/muhammadsufyan1550/savedge.git
 cd savedge
 
 # Create virtual environment
@@ -113,16 +113,7 @@ docker run -p 10000:10000 savedge
 5. Once deployed, your site will be live at `https://savedge.onrender.com` (or your chosen URL).
 
 ---
-
-## Monetization Configuration
-
-### Buy Me a Coffee
-The button links to `https://buymeacoffee.com/savedge`. To change this, update the `href` in `app/static/index.html`.
-
-### Google AdSense
-Two ad placeholders are located in `app/static/index.html`:
-1. **Top Leaderboard (728×90)**
-2. **Mid-Page Rectangle (300×250)**
+0
 
 Replace `data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"` and `data-ad-slot="XXXXXXXXXX"` with your verified AdSense publisher code once approved.
 
